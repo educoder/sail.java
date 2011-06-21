@@ -185,7 +185,10 @@ public class Event {
 				Object payload = deserializePayload(eventJson.get("payload"), context);
 				
 				Event ev = new Event(eventType, payload);
-				ev.rawPayload = eventJson.get("payload").toString();
+				if (eventJson.get("payload") == null)
+					ev.rawPayload = null;
+				else
+					ev.rawPayload = eventJson.get("payload").toString();
 				return ev;
 			} else {
 				throw new JsonParseException("Not a valid Sail Event: "+json.toString());
@@ -193,7 +196,9 @@ public class Event {
 		}
 		
 		private Object deserializePayload(JsonElement rawPayload, JsonDeserializationContext context) {
-			if (rawPayload.isJsonPrimitive()) {
+			if (rawPayload == null) {
+				return null;
+			} else if (rawPayload.isJsonPrimitive()) {
 				return parsePrimitivePayload(rawPayload.getAsJsonPrimitive(), context);
 			} else if (rawPayload.isJsonArray()) {
 				return handleArrayPayload(rawPayload.getAsJsonArray(), context);
