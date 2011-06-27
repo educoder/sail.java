@@ -1,4 +1,4 @@
-package org.encorelab.sail.examples;
+package org.encorelab.sail.agent;
 
 import java.io.IOException;
 import java.util.Date;

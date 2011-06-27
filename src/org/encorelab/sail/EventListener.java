@@ -9,7 +9,7 @@ import org.jivesoftware.smack.packet.Packet;
 
 public class EventListener implements PacketListener {
 	
-	 Logger  logger = Logger.getLogger(EventListener.class.getName());
+	Logger  logger = Logger.getLogger(EventListener.class.getName());
 	
 	private HashMap<String, EventResponder> responders;
 	
