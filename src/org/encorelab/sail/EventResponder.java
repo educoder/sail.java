@@ -10,7 +10,6 @@ public abstract class EventResponder implements Runnable {
 	
 	abstract public void respond(Event ev);
 	
-	@Override
 	public void run() {
 		respond(this.event);
 	}

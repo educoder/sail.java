@@ -1,12 +1,16 @@
 package org.encorelab.sail;
 
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 
 public class EventListener implements PacketListener {
+	
+	 Logger  logger = Logger.getLogger(EventListener.class.getName());
+	
 	private HashMap<String, EventResponder> responders;
 	
 	public EventListener() {
@@ -19,9 +23,13 @@ public class EventListener implements PacketListener {
 		ev.setTo(packet.getTo());
 		ev.setStanza(packet.toXML());
 		
+		logger.info("event: " + ev);
+		
 		if (responders.containsKey(ev.getType())) {
 			EventResponder er = responders.get(ev.getType());
 			er.setEvent(ev);
+			logger.info("responder: " + ev);
+			
 			er.run();
 		}
 	}
