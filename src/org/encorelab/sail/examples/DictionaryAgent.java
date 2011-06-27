@@ -1,7 +1,6 @@
 package org.encorelab.sail.examples;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
