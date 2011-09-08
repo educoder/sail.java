@@ -1,6 +1,7 @@
 package org.encorelab.sail;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
@@ -33,6 +34,7 @@ public class XMPPClient {
 		if (state != State.DISCONNECTED)
 			throw new NullPointerException("XMPPService must be disconnected before it can be configured!");
 		
+		
 		xmppConfig = new ConnectionConfiguration(host, port);
 		xmppConfig.setSASLAuthenticationEnabled(true);
 		xmppConfig.setSecurityMode(SecurityMode.disabled);
@@ -55,6 +57,10 @@ public class XMPPClient {
 		if (!this.isConnected())
 			throw new NullPointerException("XMPPService must be connected in before it can log in!");
 		
+		// You have to put this code before you login
+	    
+		//SASLAuthentication.supportSASLMechanism("PLAIN", 0);
+	     
 		xmpp.login(username, password, resource);
 		state = State.LOGGED_IN;
 		
