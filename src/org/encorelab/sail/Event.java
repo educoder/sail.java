@@ -63,9 +63,16 @@ public class Event {
 		this.eventType = type;
 		this.payload = payload;
 	}
+	
+	public Event(String type, Object payload, String origin) {
+		this.eventType = type;
+		this.payload = payload;
+		this.origin = origin;
+	}
 
 	protected String eventType;
 	protected Object payload;
+	protected String origin;
 	
 	// These fields should not be serialized (hence 'transient'). 
 	// They are assigned after deserialization in 
@@ -172,6 +179,14 @@ public class Event {
 		return gson.fromJson(json, Event.class);
 	}
 
+	public String getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
+
 	// based on code from http://stackoverflow.com/questions/2779251/convert-json-to-hashmap-using-gson-in-java/4799594#4799594
 	private static class EventDeserializer implements JsonDeserializer<Event> {
 		public Event deserialize(JsonElement json, Type typeOfT,
@@ -182,9 +197,10 @@ public class Event {
 				JsonObject eventJson = json.getAsJsonObject();
 				
 				String eventType = eventJson.get("eventType").getAsString();
+				String origin = eventJson.get("origin").getAsString();
 				Object payload = deserializePayload(eventJson.get("payload"), context);
 				
-				Event ev = new Event(eventType, payload);
+				Event ev = new Event(eventType, payload, origin);
 				if (eventJson.get("payload") == null)
 					ev.rawPayload = null;
 				else
