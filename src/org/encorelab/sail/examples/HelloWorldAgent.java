@@ -8,6 +8,12 @@ import org.encorelab.sail.EventResponder;
 import org.encorelab.sail.agent.Agent;
 import org.jivesoftware.smack.XMPPException;
 
+/**
+ * The most basic agent
+ * 
+ * @author anthonjp
+ *
+ */
 public class HelloWorldAgent extends Agent {
 	public static void main(String[] args) {
 		Thread thread = new Thread() {
@@ -93,10 +99,20 @@ public class HelloWorldAgent extends Agent {
 		});
 	}
 
+	/**
+	 * says hello
+	 * 
+	 * @param to
+	 */
 	public void sayHelloTo(String to) {
 		xmpp.sendEvent(new Event("welcome", "Hello " + to + "!"));
 	}
 
+	/**
+	 * says goodbye
+	 * 
+	 * @param to
+	 */
 	public void sayGoodbyeTo(String to) {
 		HashMap<String, String> payload = new HashMap<String, String>();
 		payload.put("msg", "Bye " + to + "!");

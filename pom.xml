@@ -10,18 +10,6 @@
 			<artifactId>gson</artifactId>
 			<version>1.7.1</version>
 		</dependency>
-		<!--  
-		<dependency>
-			<groupId>jivesoftware</groupId>
-			<artifactId>smack</artifactId>
-			<version>3.0.4</version>
-		</dependency>
-		<dependency>
-			<groupId>jivesoftware</groupId>
-			<artifactId>smackx</artifactId>
-			<version>3.0.4</version>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>org.igniterealtime.smack</groupId>
 			<artifactId>smack</artifactId>

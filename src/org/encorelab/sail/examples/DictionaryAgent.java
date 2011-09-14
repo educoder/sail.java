@@ -22,10 +22,23 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.google.gson.Gson;
+
+/**
+ * Test agent that looks up a word in google dictionary.
+ * 
+ * @author anthonjp
+ *
+ */
 public class DictionaryAgent extends Agent {
 
 	Logger logger = Logger.getLogger(DictionaryAgent.class.getName());
 
+	/**
+	 * fires the agent
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Thread thread = new Thread() {
 			@Override
@@ -38,7 +51,7 @@ public class DictionaryAgent extends Agent {
 					agent.connect("imedia.tio.to");
 
 					System.out.println("Logging in...");
-					agent.login("DictionaryAgent", "DictionaryAgent");
+					agent.login("dictionyagent", "dictionaryagent");
 
 					System.out.println("Setting up responders...");
 					agent.setupEventResponders();
@@ -47,7 +60,7 @@ public class DictionaryAgent extends Agent {
 					agent.listen();
 
 					System.out.println("Joining groupchat...");
-					agent.joinGroupchat("s3@imedia.tio.to");
+					agent.joinGroupchat("sci@i.uio.no");
 
 					// FIXME: is this really the best way to keep the agent
 					// alive?
@@ -105,6 +118,12 @@ public class DictionaryAgent extends Agent {
 		});
 	}
 
+	/**
+	 * looks up a word and sends its definition back. 
+	 * 
+	 * @param word
+	 * @return
+	 */
 	public String lookUpWord(String word) {
 
 		String definition = null;
@@ -129,6 +148,10 @@ public class DictionaryAgent extends Agent {
 			if (finalString == null) {
 				return "No Definition Found";
 			} else {
+				
+				//FIXME remove this shit. 
+				Gson gson = new Gson();
+				HashMap fromJson = gson.fromJson(finalString, HashMap.class);
 				
 				//craziness 
 				JSONObject json = (JSONObject) new JSONParser()
