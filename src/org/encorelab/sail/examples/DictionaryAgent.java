@@ -17,11 +17,8 @@ import org.encorelab.sail.Event;
 import org.encorelab.sail.EventResponder;
 import org.encorelab.sail.agent.Agent;
 import org.jivesoftware.smack.XMPPException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
+import com.google.gdata.client.Query;
 import com.google.gson.Gson;
 
 /**
@@ -45,13 +42,13 @@ public class DictionaryAgent extends Agent {
 			public void run() {
 				try {
 					DictionaryAgent agent = new DictionaryAgent();
-					agent.setName("TheDictionaryAgent"); // can be omitted
+					agent.setName("DictionaryAgent"); // can be omitted
 
-					System.out.println(" TheDictionaryAgent Connecting...");
-					agent.connect("imedia.tio.to");
+					System.out.println("TheDictionaryAgent Connecting...");
+					agent.connect("imediamac28.uio.no");
 
 					System.out.println("Logging in...");
-					agent.login("dictionyagent", "dictionaryagent");
+					agent.login("dictionaryagent", "dictionaryagent");
 
 					System.out.println("Setting up responders...");
 					agent.setupEventResponders();
@@ -60,7 +57,7 @@ public class DictionaryAgent extends Agent {
 					agent.listen();
 
 					System.out.println("Joining groupchat...");
-					agent.joinGroupchat("sci@i.uio.no");
+					agent.joinGroupchat("scihub@conference.imediamac28.uio.no");
 
 					// FIXME: is this really the best way to keep the agent
 					// alive?
@@ -104,7 +101,7 @@ public class DictionaryAgent extends Agent {
 				String fromUsername = fromJid.split("/")[1];
 				Map payload = ev.getPayloadAsMap();
 				String word = (String) payload.get("word");
-				String definition = lookUpWord(word);
+				String definition = lookUpWord(word, ev);
 
 				if (definition != null) {
 					HashMap<String, String> newPayload = new HashMap<String, String>();
@@ -122,9 +119,10 @@ public class DictionaryAgent extends Agent {
 	 * looks up a word and sends its definition back. 
 	 * 
 	 * @param word
+	 * @param ev 
 	 * @return
 	 */
-	public String lookUpWord(String word) {
+	public String lookUpWord(String word, Event ev) {
 
 		String definition = null;
 		HttpGet httpget = new HttpGet(
@@ -151,27 +149,17 @@ public class DictionaryAgent extends Agent {
 				
 				//FIXME remove this shit. 
 				Gson gson = new Gson();
-				HashMap fromJson = gson.fromJson(finalString, HashMap.class);
+				Query q = gson.fromJson(finalString,Query.class);
 				
-				//craziness 
-				JSONObject json = (JSONObject) new JSONParser()
-						.parse(finalString);
-
-				JSONArray array = (JSONArray) json.get("primaries");
-				JSONObject terms = (JSONObject) array.get(0);
-				JSONArray t = (JSONArray) terms.get("entries");
-				JSONObject tArray = (JSONObject) t.get(1);
-				JSONArray termsArray = (JSONArray) tArray.get("terms");
-				JSONObject textArray = (JSONObject) termsArray.get(0);
-				definition = (String) textArray.get("text");
+				//Query q = (String) ev.getPayloadAsMap().get("text");
+		
+				//need to parse and return it to the client
 				logger.info("definition: " + definition);
 			}
 
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 
