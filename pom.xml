@@ -4,6 +4,17 @@
 	<groupId>sail.java</groupId>
 	<artifactId>sail.java</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>http://svn.apache.org/viewcvs.cgi/maven</url>
+    <connection>http://svn.apache.org/viewcvs.cgi/maven</connection>
+  </scm>
 	<dependencies>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -35,7 +46,5 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1</version>
 		</dependency>
-
-		
 	</dependencies>
 </project>
