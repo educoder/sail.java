@@ -45,7 +45,7 @@ public class DictionaryAgent extends Agent {
 					agent.setName("DictionaryAgent"); // can be omitted
 
 					System.out.println("TheDictionaryAgent Connecting...");
-					agent.connect("imediamac28.uio.no");
+					agent.connect("imediad.uio.no");
 
 					System.out.println("Logging in...");
 					agent.login("dictionaryagent", "dictionaryagent");
@@ -57,7 +57,7 @@ public class DictionaryAgent extends Agent {
 					agent.listen();
 
 					System.out.println("Joining groupchat...");
-					agent.joinGroupchat("scihub@conference.imediamac28.uio.no");
+					agent.joinGroupchat("s@c.imedi.uio.no");
 
 					// FIXME: is this really the best way to keep the agent
 					// alive?
@@ -148,12 +148,11 @@ public class DictionaryAgent extends Agent {
 			} else {
 				
 				//FIXME remove this shit. 
-				Gson gson = new Gson();
-				Query q = gson.fromJson(finalString,Query.class);
-				
+//				Gson gson = new Gson();
+//				Query q = gson.fromJson(finalString,Query.class);
+//				
 				//Query q = (String) ev.getPayloadAsMap().get("text");
 		
-				//need to parse and return it to the client
 				logger.info("definition: " + definition);
 			}
 
