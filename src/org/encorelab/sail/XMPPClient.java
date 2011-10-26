@@ -10,6 +10,11 @@ import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 
+/**
+ * The XMPP Client
+ * 
+ * @author anthonjp
+ */
 public class XMPPClient {
 	private int state;
 	
@@ -29,10 +34,17 @@ public class XMPPClient {
 		public static final int CONNECTED = 1;
 		public static final int LOGGED_IN = 2;
 	}
-	
+
+	/**
+	 * Configures the client
+	 * 
+	 * @param host
+	 * @param port
+	 */
 	public void configure(String host, int port) {
 		if (state != State.DISCONNECTED)
 			throw new NullPointerException("XMPPService must be disconnected before it can be configured!");
+		
 		
 		
 		xmppConfig = new ConnectionConfiguration(host, port);
@@ -40,6 +52,11 @@ public class XMPPClient {
 		xmppConfig.setSecurityMode(SecurityMode.disabled);
 	}
 	
+	/**
+	 * Does the connection
+	 * 
+	 * @throws XMPPException
+	 */
 	public void connect() throws XMPPException {
 		if (xmppConfig == null)
 			throw new NullPointerException("XMPPService must be configured before it can connect!");
@@ -53,6 +70,14 @@ public class XMPPClient {
 		state = State.CONNECTED;
 	}
 	
+	/**
+	 * Does the login
+	 * 
+	 * @param username
+	 * @param password
+	 * @param resource
+	 * @throws XMPPException
+	 */
 	public void login(String username, String password, String resource) throws XMPPException {
 		if (!this.isConnected())
 			throw new NullPointerException("XMPPService must be connected in before it can log in!");
@@ -84,20 +109,33 @@ public class XMPPClient {
 		
 	}*/
 	
+	/**
+	 * Disconnects from the xmpp service
+	 */
 	public void disconnect() {
 		xmpp.disconnect();
 		state = State.DISCONNECTED;
 	}
 	
+	/**
+	 * is the this connected to the xmpp server.
+	 * 
+	 * @return
+	 */
 	public boolean isConnected() {
 		if (xmpp.isConnected() && state == State.CONNECTED) {
 			return true;
 		} else {
 			state = State.DISCONNECTED;
 			return false;
-		}
+		}// if
 	}
 	
+	/**
+	 * is the user logged in
+	 * 
+	 * @return
+	 */
 	public boolean isLoggedIn() {
 		if (xmpp.isAuthenticated() && state == State.LOGGED_IN) {
 			return true;
@@ -110,18 +148,38 @@ public class XMPPClient {
 		}
 	}
 	
+	/**
+	 * whats my jid
+	 * 
+	 * @return
+	 */
 	public String getMyJid() {
 		return username + "@" + xmpp.getHost();
 	}
 	
+	/**
+	 * whats the jid of the room
+	 * 
+	 * @return
+	 */
 	public String getRoomJid() {
 		return roomJid;
 	}
 	
+	/**
+	 * whats my specfic jid in the room
+	 * 
+	 * @return
+	 */
 	public String getMyJidInRoom() {
 		return getRoomJid() + "/" + resource;
 	}
 	
+	/**
+	 * Sends an event
+	 * 
+	 * @param ev
+	 */
 	public void sendEvent(Event ev) {
 		if (!this.isLoggedIn())
 			throw new NullPointerException("XMPPService must be logged in before it can send!");
@@ -131,10 +189,21 @@ public class XMPPClient {
 		xmpp.sendPacket(m);
 	}
 	
+	/**
+	 * adds an event listener
+	 * 
+	 * @param listener
+	 */
 	public void addEventListener(EventListener listener) {
 		addEventListener(listener, new PacketTypeFilter(Message.class));
 	}
 	
+	/**
+	 * adds an event listener
+	 * 
+	 * @param listener
+	 * @param filter
+	 */
 	public void addEventListener(EventListener listener, PacketFilter filter) {
 		xmpp.addPacketListener(listener, filter);
 	}

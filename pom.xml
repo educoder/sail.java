@@ -1,38 +1,81 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>sail.java</groupId>
-  <artifactId>sail.java</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <dependencies>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>1.7.1</version>
-    </dependency>
-    <dependency>
-      <groupId>jivesoftware</groupId>
-      <artifactId>smack</artifactId>
-      <version>3.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>jivesoftware</groupId>
-      <artifactId>smackx</artifactId>
-      <version>3.1.0</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.httpcomponents</groupId>
-    	<artifactId>httpclient</artifactId>
-    	<version>4.1.1</version>
-    </dependency>
-    <dependency>
-    	<groupId>commons-lang</groupId>
-    	<artifactId>commons-lang</artifactId>
-    	<version>2.6</version>
-    </dependency>
-    <dependency>
-    	<groupId>com.googlecode.json-simple</groupId>
-    	<artifactId>json-simple</artifactId>
-    	<version>1.1</version>
-    </dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.encorelab</groupId>
+	<artifactId>sail.java</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<description>A java based agent project as part of the SAIL (Scalable architecture for interactive learning) Framework for creating educational technology.</description>
+	<url>https://github.com/educoder/sail.java</url>
+	<repositories>
+	<repository>
+		<id>mandubian-mvn</id>
+		<url>http://mandubian-mvn.googlecode.com/svn/trunk/mandubian-mvn/repository</url>
+	</repository>
+	</repositories>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git:git@github.com:educoder/sail.java.git</connection>
+		<developerConnection>scm:git:git@github.com:educoder/sail.java.git</developerConnection>
+		<url>git@github.com:educoder/sail.java.git</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>anthony</id>
+			<name>Anthony Perritano</name>
+			<email>aperritano@gmail.com</email>
+			<organization>InterMedia, University of Oslo</organization>
+		</developer>
+		<developer>
+			<id>matt</id>
+			<name>Matt Zukowski</name>
+			<email>matt@roughest.net</email>
+			<organization>OISE, University of Toronto</organization>
+		</developer>
+	</developers>
+	<dependencies>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>1.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.igniterealtime.smack</groupId>
+			<artifactId>smack</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.igniterealtime.smack</groupId>
+			<artifactId>smackx</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.gdata</groupId>
+			<artifactId>gdata-core-1.0</artifactId>
+			<version>1.41.5</version>
+		</dependency>
+	</dependencies>
+
 </project>

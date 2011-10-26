@@ -8,6 +8,12 @@ import org.encorelab.sail.EventResponder;
 import org.encorelab.sail.agent.Agent;
 import org.jivesoftware.smack.XMPPException;
 
+/**
+ * The most basic agent
+ * 
+ * @author anthonjp
+ *
+ */
 public class HelloWorldAgent extends Agent {
 	public static void main(String[] args) {
 		Thread thread = new Thread() {
@@ -18,11 +24,11 @@ public class HelloWorldAgent extends Agent {
 					agent.setName("TheHelloWorldAgent"); // can be omitted
 
 					System.out.println("Connecting...");
-					agent.connect("imedia.tio.to");
+					agent.connect("imediamac28.uio.no");
 
 					System.out.println("Logging in...");
-					agent.login("HelloWorldAgent",
-							"HelloWorldAgent");
+					agent.login("helloworldagent",
+							"helloworldagent");
 
 					System.out.println("Setting up responders...");
 					agent.setupEventResponders();
@@ -31,7 +37,7 @@ public class HelloWorldAgent extends Agent {
 					agent.listen();
 
 					System.out.println("Joining groupchat...");
-					agent.joinGroupchat("s3@imedia.tio.to");
+					agent.joinGroupchat("scihub@conference.imediamac28.uio.no");
 
 					// FIXME: is this really the best way to keep the agent alive?
 					while (true) {
@@ -60,7 +66,7 @@ public class HelloWorldAgent extends Agent {
 		/*
 		 * When the agent sees an event like:
 		 * 
-		 * {'eventType':'hello'}
+		 * {'eventType':'hello', 'payload': {}, 'origin':'obama'}
 		 * 
 		 * it will respond by triggering an event like:
 		 * 
@@ -93,10 +99,20 @@ public class HelloWorldAgent extends Agent {
 		});
 	}
 
+	/**
+	 * says hello
+	 * 
+	 * @param to
+	 */
 	public void sayHelloTo(String to) {
 		xmpp.sendEvent(new Event("welcome", "Hello " + to + "!"));
 	}
 
+	/**
+	 * says goodbye
+	 * 
+	 * @param to
+	 */
 	public void sayGoodbyeTo(String to) {
 		HashMap<String, String> payload = new HashMap<String, String>();
 		payload.put("msg", "Bye " + to + "!");

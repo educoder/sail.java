@@ -1,7 +1,6 @@
 package org.encorelab.sail.examples;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -18,28 +17,38 @@ import org.encorelab.sail.Event;
 import org.encorelab.sail.EventResponder;
 import org.encorelab.sail.agent.Agent;
 import org.jivesoftware.smack.XMPPException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
+import com.google.gdata.client.Query;
+import com.google.gson.Gson;
+
+/**
+ * Test agent that looks up a word in google dictionary.
+ * 
+ * @author anthonjp
+ *
+ */
 public class DictionaryAgent extends Agent {
 
 	Logger logger = Logger.getLogger(DictionaryAgent.class.getName());
 
+	/**
+	 * fires the agent
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
 				try {
 					DictionaryAgent agent = new DictionaryAgent();
-					agent.setName("TheDictionaryAgent"); // can be omitted
+					agent.setName("DictionaryAgent"); // can be omitted
 
-					System.out.println(" TheDictionaryAgent Connecting...");
-					agent.connect("imedia.tio.to");
+					System.out.println("TheDictionaryAgent Connecting...");
+					agent.connect("imediad.uio.no");
 
 					System.out.println("Logging in...");
-					agent.login("DictionaryAgent", "DictionaryAgent");
+					agent.login("dictionaryagent", "dictionaryagent");
 
 					System.out.println("Setting up responders...");
 					agent.setupEventResponders();
@@ -48,7 +57,7 @@ public class DictionaryAgent extends Agent {
 					agent.listen();
 
 					System.out.println("Joining groupchat...");
-					agent.joinGroupchat("s3@imedia.tio.to");
+					agent.joinGroupchat("s@c.imedi.uio.no");
 
 					// FIXME: is this really the best way to keep the agent
 					// alive?
@@ -92,7 +101,7 @@ public class DictionaryAgent extends Agent {
 				String fromUsername = fromJid.split("/")[1];
 				Map payload = ev.getPayloadAsMap();
 				String word = (String) payload.get("word");
-				String definition = lookUpWord(word);
+				String definition = lookUpWord(word, ev);
 
 				if (definition != null) {
 					HashMap<String, String> newPayload = new HashMap<String, String>();
@@ -106,7 +115,14 @@ public class DictionaryAgent extends Agent {
 		});
 	}
 
-	public String lookUpWord(String word) {
+	/**
+	 * looks up a word and sends its definition back. 
+	 * 
+	 * @param word
+	 * @param ev 
+	 * @return
+	 */
+	public String lookUpWord(String word, Event ev) {
 
 		String definition = null;
 		HttpGet httpget = new HttpGet(
@@ -131,25 +147,18 @@ public class DictionaryAgent extends Agent {
 				return "No Definition Found";
 			} else {
 				
-				//craziness 
-				JSONObject json = (JSONObject) new JSONParser()
-						.parse(finalString);
-
-				JSONArray array = (JSONArray) json.get("primaries");
-				JSONObject terms = (JSONObject) array.get(0);
-				JSONArray t = (JSONArray) terms.get("entries");
-				JSONObject tArray = (JSONObject) t.get(1);
-				JSONArray termsArray = (JSONArray) tArray.get("terms");
-				JSONObject textArray = (JSONObject) termsArray.get(0);
-				definition = (String) textArray.get("text");
+				//FIXME remove this shit. 
+//				Gson gson = new Gson();
+//				Query q = gson.fromJson(finalString,Query.class);
+//				
+				//Query q = (String) ev.getPayloadAsMap().get("text");
+		
 				logger.info("definition: " + definition);
 			}
 
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 
