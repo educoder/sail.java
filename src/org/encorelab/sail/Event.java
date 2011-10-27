@@ -2,10 +2,16 @@ package org.encorelab.sail;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.joda.time.format.DateTimeFormat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -59,20 +65,42 @@ import com.google.gson.JsonPrimitive;
  * @author mzukowski
  */
 public class Event {
+	public static String DATETIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
+	
 	public Event(String type, Object payload) {
 		this.eventType = type;
 		this.payload = payload;
+		this.timestamp = new Date();
 	}
 	
-	public Event(String type, Object payload, String origin) {
+	/**
+	 * Create a new event with custom metadata.
+	 * 
+	 * @param type
+	 * @param payload
+	 * @param meta Optional keys for `(Date) timestamp`, `(String) origin`, `(JsonObject) run`, and in the future other values.
+	 */
+	public Event(String type, Object payload, Map<String,Object> meta) {
 		this.eventType = type;
 		this.payload = payload;
-		this.origin = origin;
+		
+		if (meta.containsKey("origin"))
+			this.origin = (String) meta.get("origin");
+	
+		if (meta.containsKey("timestamp"))
+			this.timestamp = (Date) meta.get("timestamp");
+		else
+			this.timestamp = new Date();
+		
+		if (meta.containsKey("run"))
+			this.run = (JsonObject) meta.get("run");
 	}
 
 	protected String eventType;
 	protected Object payload;
 	protected String origin;
+	protected Date timestamp;
+	protected JsonObject run;
 	
 	// These fields should not be serialized (hence 'transient'). 
 	// They are assigned after deserialization in 
@@ -157,7 +185,8 @@ public class Event {
 	}
 
 	public String toJson() {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder()
+			.setDateFormat(Event.DATETIME_PATTERN).create();
 		return gson.toJson(this);
 	}
 	
@@ -187,6 +216,14 @@ public class Event {
 		this.origin = origin;
 	}
 
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
 	// based on code from http://stackoverflow.com/questions/2779251/convert-json-to-hashmap-using-gson-in-java/4799594#4799594
 	private static class EventDeserializer implements JsonDeserializer<Event> {
 		public Event deserialize(JsonElement json, Type typeOfT,
@@ -197,10 +234,19 @@ public class Event {
 				JsonObject eventJson = json.getAsJsonObject();
 				
 				String eventType = eventJson.get("eventType").getAsString();
-				String origin = eventJson.get("origin").getAsString();
 				Object payload = deserializePayload(eventJson.get("payload"), context);
 				
-				Event ev = new Event(eventType, payload, origin);
+				Date timestamp = 
+						DateTimeFormat.forPattern(DATETIME_PATTERN).
+						parseDateTime(eventJson.get("timestamp").getAsString()).
+						toDate();
+				
+				Map<String,Object> meta = new HashMap<String, Object>();
+				meta.put("origin", eventJson.get("origin").getAsString());
+				meta.put("timestamp", timestamp);
+				meta.put("run", eventJson.get("run").getAsString());
+				
+				Event ev = new Event(eventType, payload, meta);
 				if (eventJson.get("payload") == null)
 					ev.rawPayload = null;
 				else
