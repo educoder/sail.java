@@ -2,8 +2,6 @@ package org.encorelab.sail;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -236,15 +234,19 @@ public class Event {
 				String eventType = eventJson.get("eventType").getAsString();
 				Object payload = deserializePayload(eventJson.get("payload"), context);
 				
-				Date timestamp = 
-						DateTimeFormat.forPattern(DATETIME_PATTERN).
-						parseDateTime(eventJson.get("timestamp").getAsString()).
-						toDate();
+				
+//				String ts = eventJson.get("timestamp").getAsString();
+//				
+//				
+//				Date timestamp = 
+//						DateTimeFormat.forPattern(DATETIME_PATTERN).
+//						parseDateTime(eventJson.get("timestamp").getAsString()).
+//						toDate();
 				
 				Map<String,Object> meta = new HashMap<String, Object>();
 				meta.put("origin", eventJson.get("origin").getAsString());
-				meta.put("timestamp", timestamp);
-				meta.put("run", eventJson.get("run").getAsString());
+				//meta.put("timestamp", timestamp);
+				//meta.put("run", eventJson.get("run").getAsString());
 				
 				Event ev = new Event(eventType, payload, meta);
 				if (eventJson.get("payload") == null)
