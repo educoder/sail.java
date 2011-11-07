@@ -235,8 +235,6 @@ public class Event {
 				Object payload = deserializePayload(eventJson.get("payload"), context);
 				
 				
-//				String ts = eventJson.get("timestamp").getAsString();
-//				
 //				
 //				Date timestamp = 
 //						DateTimeFormat.forPattern(DATETIME_PATTERN).
