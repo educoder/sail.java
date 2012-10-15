@@ -66,6 +66,16 @@ public abstract class Agent {
 		xmpp.addEventListener(listener);
 	}
 	
+	
+	/** 
+	 * Starts listening for SAIL events
+	 */
+	public void start() {
+		while(!Thread.currentThread().isInterrupted())
+			listener.processPacket(xmpp.getPC().nextResult());
+	}
+	
+	
 	/**
 	 * sets the name
 	 * 

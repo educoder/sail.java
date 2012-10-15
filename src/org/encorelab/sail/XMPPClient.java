@@ -1,10 +1,10 @@
 package org.encorelab.sail;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.SASLAuthentication;
+import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
+import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
 import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message;
@@ -96,7 +96,6 @@ public class XMPPClient {
 	public void joinGroupchat(String roomJid, String resource) {
 		if (!this.isLoggedIn())
 			throw new NullPointerException("XMPPService must be logged in before it can join a conference room!");
-		
 		this.roomJid = roomJid;
 		Presence p = new Presence(Presence.Type.available);
 		p.setStatus("chat");
@@ -183,7 +182,6 @@ public class XMPPClient {
 	public void sendEvent(Event ev) {
 		if (!this.isLoggedIn())
 			throw new NullPointerException("XMPPService must be logged in before it can send!");
-		
 		Message m = new Message(this.roomJid, Message.Type.groupchat);
 		m.setBody(ev.toJson());
 		xmpp.sendPacket(m);
@@ -206,5 +204,10 @@ public class XMPPClient {
 	 */
 	public void addEventListener(EventListener listener, PacketFilter filter) {
 		xmpp.addPacketListener(listener, filter);
+	}
+	
+	
+	public PacketCollector getPC() {
+		return xmpp.createPacketCollector(null);
 	}
 }
